@@ -133,49 +133,51 @@ routine_input = None
 while kana_input is None:
     os.system("clear")
 
-    for x in range(0, half_console_height - 3):
+    for x in range(0, half_console_height - 2):
         print()
 
     print("Select Kana".center(console_width))
     print("1: Hiragana".center(console_width))
     print("2: Katakana".center(console_width))
+    print("3. Challenge Mode".center(console_width))
 
     kana_input = input()
 
     try:
         kana_input = int(kana_input)
         
-        if kana_input == 1 or kana_input == 2:
+        if kana_input >= 1 and kana_input <= 3:
             break
         else:
             kana_input = None
     except:
         kana_input = None
 
-while routine_input is None:
-    os.system("clear")
+if kana_input != 3:
+    while routine_input is None:
+        os.system("clear")
 
-    for clear_lines in range(0, half_console_height - 5):
+        for clear_lines in range(0, half_console_height - 5):
+            print()
+    
+        print("Select a practice routine".center(console_width))
+        print("1: Kana".center(console_width))
+        print("2: Diacritics".center(console_width))
+        print("3: Digraphs".center(console_width))
+        print("4: All".center(console_width))
         print()
-    
-    print("Select a practice routine".center(console_width))
-    print("1: Kana".center(console_width))
-    print("2: Diacritics".center(console_width))
-    print("3: Digraphs".center(console_width))
-    print("4: All".center(console_width))
-    print()
 
-    routine_input = input()
+        routine_input = input()
     
-    try:
-        routine_input = int(routine_input)
-        if routine_input >= 1 and routine_input <= 4:
-            break
-        else:
+        try:
+            routine_input = int(routine_input)
+            if routine_input >= 1 and routine_input <= 4:
+                break
+            else:
+                routine_input = None
+
+        except:
             routine_input = None
-
-    except:
-        routine_input = None
 
 match kana_input:
     case 1:
@@ -206,6 +208,13 @@ match kana_input:
             case 4:
                 kana_selection = katakana_base + katakana_diacritics + katakana_digraphs
                 romaji_selection = romaji_base + romanji_diacritics + romaji_digraphs
+    case 3:
+        hiragana = hiragana_base + hiragana_diacritics + hiragana_digraphs
+        katakana = katakana_base + katakana_diacritics + katakana_digraphs
+        romaji_selection = romaji_base + romanji_diacritics + romaji_digraphs
+
+        for kana in range(len(hiragana)):
+            kana_selection.append([hiragana[kana], katakana[kana]])
                 
 while kana_selection:
     rand = random.randint(0, len(kana_selection) - 1)
@@ -231,4 +240,9 @@ for kana in range(len(kana_randomized)):
         print()
 
     print(f"{romaji_randomized[kana]}".center(console_width))
-    input(f"{kana_randomized[kana]}".center(console_width)) 
+
+    if kana_input == 3:
+        input(f"{kana_randomized[kana][0]} {kana_randomized[kana][1]}".center(console_width)) 
+
+    else:
+        input(f"{kana_randomized[kana]}".center(console_width)) 
