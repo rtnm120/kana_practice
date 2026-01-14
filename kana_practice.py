@@ -9,7 +9,7 @@ import shutil
 
 cursor.hide()
 
-hiragana = [
+hiragana_base = [
     "あ","い","う","え","お",
     "か","き","く","け","こ",
     "さ","し","す","せ","そ",
@@ -45,7 +45,7 @@ hiragana_digraphs = [
     "ぴゃ","ぴゅ","ぴょ"
 ]
 
-katakana = [
+katakana_base = [
     "ア","イ","ウ","エ","オ",
     "カ","キ","ク","ケ","コ",
     "サ","シ","ス","セ","ソ",
@@ -81,7 +81,7 @@ katakana_digraphs = [
     "ピャ","ピュ","ピョ",
 ]
 
-romaji = [
+romaji_base = [
     "a","i","u","e","o",
     "ka","ki","ku","ke","ko",
     "sa","shi","su","se","so",
@@ -117,18 +117,20 @@ romaji_digraphs = [
     "pya","pyu","pyo"
 ]
 
-hiragana_randomized = []
-katakana_randomized = []
+kana_selection = []
+kana_randomized = []
+
+romaji_selection = []
 romaji_randomized = []
 
 console_width = shutil.get_terminal_size().columns
 console_height = shutil.get_terminal_size().lines
 half_console_height = int((console_height - 1) / 2)
 
-kana_selection = None
-routine_selection = None
+kana_input = None
+routine_input = None
 
-while kana_selection is None:
+while kana_input is None:
     os.system("clear")
 
     for x in range(0, half_console_height - 3):
@@ -141,16 +143,16 @@ while kana_selection is None:
     kana_input = input()
 
     try:
-        kana_selection = int(kana_input)
+        kana_input = int(kana_input)
         
-        if kana_selection == 1 or kana_selection == 2:
+        if kana_input == 1 or kana_input == 2:
             break
         else:
-            kana_selection = None
+            kana_input = None
     except:
-        kana_selection = None
+        kana_input = None
 
-while routine_selection is None:
+while routine_input is None:
     os.system("clear")
 
     for clear_lines in range(0, half_console_height - 5):
@@ -166,25 +168,53 @@ while routine_selection is None:
     routine_input = input()
     
     try:
-        routine_selection = int(routine_input)
-        if routine_selection >= 1 and routine_selection <= 4:
+        routine_input = int(routine_input)
+        if routine_input >= 1 and routine_input <= 4:
             break
         else:
-            routine_selection = None
+            routine_input = None
 
     except:
-        routine_selection = None
+        routine_input = None
 
-while hiragana:
-    rand = random.randint(0, len(hiragana) - 1)
+match kana_input:
+    case 1:
+        match routine_input:
+            case 1:
+                kana_selection = hiragana_base
+                romaji_selection = romaji_base
+            case 2:
+                kana_selection = hiragana_diacritics
+                romaji_selection = romanji_diacritics
+            case 3:
+                kana_selection = hiragana_digraphs
+                romaji_selection = romaji_digraphs
+            case 4:
+                kana_selection = hiragana_base + hiragana_diacritics + hiragana_digraphs
+                romaji_selection = romaji_base + romanji_diacritics + romaji_digraphs
+    case 2:
+        match routine_input:
+            case 1:
+                kana_selection = katakana_base
+                romaji_selection = romaji_base
+            case 2:
+                kana_selection = katakana_diacritics
+                romaji_selection = romanji_diacritics
+            case 3:
+                kana_selection = katakana_digraphs
+                romaji_selection = romaji_digraphs
+            case 4:
+                kana_selection = katakana_base + katakana_diacritics + katakana_digraphs
+                romaji_selection = romaji_base + romanji_diacritics + romaji_digraphs
+                
+while kana_selection:
+    rand = random.randint(0, len(kana_selection) - 1)
 
-    hiragana_randomized.append(hiragana[rand])
-    katakana_randomized.append(katakana[rand])
-    romaji_randomized.append(romaji[rand])
+    kana_randomized.append(kana_selection[rand])
+    romaji_randomized.append(romaji_selection[rand])
     
-    hiragana.pop(rand)
-    katakana.pop(rand)
-    romaji.pop(rand)
+    kana_selection.pop(rand)
+    romaji_selection.pop(rand)
 
 for kana in romaji_randomized:
     os.system("clear")
@@ -194,11 +224,11 @@ for kana in romaji_randomized:
 
     input(kana.center(console_width))
 
-for kana in range(len(hiragana_randomized)):
+for kana in range(len(kana_randomized)):
     os.system("clear")
     
-    for clear_lines in range(0, half_console_height - 1):
+    for clear_lines in range(0, half_console_height):
         print()
 
     print(f"{romaji_randomized[kana]}".center(console_width))
-    input(f"{hiragana_randomized[kana]} {katakana_randomized[kana]}".center(console_width)) 
+    input(f"{kana_randomized[kana]}".center(console_width)) 
